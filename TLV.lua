@@ -1,6 +1,6 @@
 local _, TLVaddon = ...
 
-TLV = {}
+local TLV = {}
 
 function TLV:AddOnTitle ()
 
@@ -80,7 +80,7 @@ function TLV:Alert (alert)
     end
 
     StaticPopupDialogs["TLV_ALERT"] = {
-        text = "|cfff0b040" .. TLV:AddOnTitle () .. "|r\n\n" .. alert,
+        text = "|cfff0b040" .. TLV:AddOnTitle() .. "|r\n\n" .. alert,
         button1 = OKAY,
         sound = IG_MAINMENU_OPEN,
         timeout = 0,
@@ -95,7 +95,7 @@ end
 function TLV:Chat(msg)
 
     if DEFAULT_CHAT_FRAME then
-        DEFAULT_CHAT_FRAME:AddMessage("|cfff0b040" .. TLV:AddOnTitle () .. "|r: " .. msg, 1, 1, 0)
+        DEFAULT_CHAT_FRAME:AddMessage(TLV:AddOnTitle() .. ": " .. msg, 1, 1, 0)
     end
 
 end
@@ -109,3 +109,5 @@ function TLV:Debug(msg)
     end
 
 end
+
+TLVaddon.TLV = TLV

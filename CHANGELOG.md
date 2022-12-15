@@ -2,6 +2,9 @@
 
 Full changelog: https://github.com/last-voice/ElvUI_QuestCount/blob/main/CHANGELOG.md
 
+v1.3
+- Never give up - the completed quests seem to count no more
+
 v1.2
 - README
 
