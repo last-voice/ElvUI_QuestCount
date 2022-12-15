@@ -1,0 +1,10 @@
+## Interface: 100002
+## Title: |cff1784d1ElvUI|r QuestCount |cfff0b040#TLV|r
+## Notes: ElvUI data text: Number of quests
+## Author: the_last_voice
+## Version: v1.0
+## RequiredDeps: ElvUI
+
+localization\enUS.lua
+localization\deDE.lua
+TLV_ElvUI_QuestCount.lua
