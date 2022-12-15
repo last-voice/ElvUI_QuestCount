@@ -7,4 +7,6 @@
 
 localization\enUS.lua
 localization\deDE.lua
+
+TLV.lua
 TLV_ElvUI_QuestCount.lua
