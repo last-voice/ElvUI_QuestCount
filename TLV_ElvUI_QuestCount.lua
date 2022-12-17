@@ -1,103 +1,152 @@
-local TLVaddonName, TLVaddon = ...
+local QuestCount_Name, QuestCount = ...
 
-local E = unpack(ElvUI)
-local DT = E:GetModule("DataTexts")
+local L = QuestCount.L
+local TLVlib = QuestCount.TLVlib
 
-local L = TLVaddon.L
-local TLV = TLVaddon.TLV
+QuestCount.E = unpack(ElvUI) -- EvlUI needed
+QuestCount.DT = QuestCount.E:GetModule("DataTexts") -- DataTexts needed
 
-local ElvUIColor
-
-local TLVDataText
-
-function TLVaddon:qdbg (cnt, questInfo)
+function QuestCount:qdbg (cnt, questInfo)
 
     if (cnt == 1) then
-        TLV:Debug("--- --- --- --- --- --- --- --- --- ---")
+        TLVlib:Debug("--- --- --- --- --- --- --- --- --- ---")
     end
 
-    append = ""
+    local questType = C_QuestLog.GetQuestType(questInfo.questID)
+
+    local append = ""
+
+    -- IntelliJ-IDEA-Lua-IDE-WoW-API/APIs/QuestLog.lua:339
+    --QuestTag.Group = 1
+    --QuestTag.PvP = 41
+    --QuestTag.Raid = 62
+    --QuestTag.Dungeon = 81
+    --QuestTag.Legendary = 83
+    --QuestTag.Heroic = 85
+    --QuestTag.Raid10 = 88
+    --QuestTag.Raid25 = 89
+    --QuestTag.Scenario = 98
+    --QuestTag.Account = 102
+    --QuestTag.CombatAlly = 266
+
+    if (questType == 1) then
+        append = append .. " ....t:group"
+    elseif (questType == 41) then
+        append = append .. " ....t:pvp"
+    elseif (questType == 62) then
+        append = append .. " ....t:raid"
+    elseif (questType == 81) then
+        append = append .. " ....t:dungeon"
+    elseif (questType == 83) then
+        append = append .. " ....t:legendary"
+    elseif (questType == 85) then
+        append = append .. " ....t:heroic"
+    elseif (questType == 88) then
+        append = append .. " ....t:raid10"
+    elseif (questType == 89) then
+        append = append .. " ....t:raid25"
+    elseif (questType == 98) then
+        append = append .. " ....t:scenario"
+    elseif (questType == 102) then
+        append = append .. " ....t:account"
+    elseif (questType == 266) then
+        append = append .. " ....t:combatally"
+    elseif (questType > 0) then
+        append = append .. " ....t:" .. questType
+    end
+
+    if (questInfo.campaignID) then
+        append = append .. " ....c:" .. questInfo.campaignID
+    end
 
     if (questInfo.frequency ~= nil) then
         if (questInfo.frequency > 0) then
-            append = " ....f:" .. questInfo.frequency
+            append = append .. " ....f:" .. questInfo.frequency
         end
     end
 
+    if (questInfo.isHidden) then
+        append = append .. " ....hidden"
+    end
+
     if (questInfo.isTask) then
-        append = " ....tast"
+        append = append .. " ....tast"
     end
 
     if (questInfo.isBounty) then
-        append = " ....bounty"
+        append = append .. " ....bounty"
     end
 
     if (questInfo.isStory) then
-        append = " ....story"
+        append = append .. " ....story"
     end
 
     if (not questInfo.isScaling) then
-        append = " ....!scaling"
+        append = append .. " ....!scaling"
     end
 
     if (questInfo.isAutoComplete) then
-        append = " ....autocomplete"
+        append = append .. " ....autocomplete"
     end
 
     if (C_QuestLog.IsWorldQuest(questInfo.questID)) then
-        append = " ....worldq"
+        append = append .. " ....worldq"
     end
 
     if (C_QuestLog.QuestHasWarModeBonus(questInfo.questID)) then
-        append = " ....warmodebonus"
+        append = append .. " ....warmodebonus"
     end
 
     if (C_QuestLog.IsThreatQuest(questInfo.questID)) then
-        append = " ....threat"
+        append = append .. " ....threat"
     end
 
     if (C_QuestLog.IsRepeatableQuest(questInfo.questID)) then
-        append = " ....repeatable"
+        append = append .. " ....repeatable"
     end
 
     if (C_QuestLog.IsQuestTrivial(questInfo.questID)) then
-        append = " ....trivial"
+        append = append .. " ....trivial"
     end
 
     if (C_QuestLog.IsQuestTask(questInfo.questID)) then
-        append = " ....task"
+        append = append .. " ....task"
     end
 
     if (C_QuestLog.IsQuestReplayable(questInfo.questID)) then
-        append = " ....replayable"
+        append = append .. " ....replayable"
     end
 
     if (C_QuestLog.IsQuestInvasion(questInfo.questID)) then
-        append = " ....invasion"
+        append = append .. " ....invasion"
     end
 
     if (C_QuestLog.IsQuestCalling(questInfo.questID)) then
-        append = " ....calling"
+        append = append .. " ....calling"
     end
 
     if (not C_QuestLog.IsOnQuest(questInfo.questID)) then
-        append = " ....!ison"
+        append = append .. " ....!ison"
     end
 
     if (C_QuestLog.IsLegendaryQuest(questInfo.questID)) then
-        append = " ....legendary"
+        append = append .. " ....legendary"
     end
 
     if (C_QuestLog.IsAccountQuest(questInfo.questID)) then
-        append = " ....account"
+        append = append .. " ....account"
     end
 
-    TLV:Debug(cnt .. " " .. questInfo.questID .. " " .. questInfo.title .. append)
+    if (C_QuestLog.IsComplete(questInfo.questID)) then
+        append = append .. " ....complete"
+    end
+
+    TLVlib:Debug(cnt .. " " .. questInfo.questID .. " " .. questInfo.title .. append)
 
 
 end
 
-function TLVaddon:StandardQuests ()
+function QuestCount:CountingQuests ()
 
     local quests, _ = C_QuestLog.GetNumQuestLogEntries()
 
@@ -109,35 +158,15 @@ function TLVaddon:StandardQuests ()
 
         if (questInfo.questID > 0) then
 
-            -- this is a real quest, no header or else
-
-            if (questInfo.campaignID == nil) then
-
-                -- no campaign quest
+            if (not C_QuestLog.IsAccountQuest(questInfo.questID)) then
+                -- no account quest
 
                 if (not questInfo.isHidden) then
+                    -- no hidden quests
+                    cnt = cnt + 1
 
-                    -- the quest ist not hidden
+                    QuestCount:qdbg(cnt, questType, questInfo)
 
-                    local questType = C_QuestLog.GetQuestType(questInfo.questID)
-
-                    if (not C_QuestLog.IsComplete(questInfo.questID)) then
-
-                        -- quest is not complete
-
-                        if (not C_QuestLog.IsQuestTrivial(questInfo.questID)) then
-
-                            -- the quest is not trivial
-
-                            -- so this is a standard quest!
-
-                            cnt = cnt + 1
-
-                            -- TLVaddon:qdbg(cnt, questInfo)
-
-                        end
-
-                    end
 
                 end
 
@@ -145,34 +174,25 @@ function TLVaddon:StandardQuests ()
 
         end
 
-    end
+        return cnt
 
-    return cnt
+    end
 
 end
 
-function TLVaddon:OnEvent (event, arg1)
-
-    if event == "ADDON_LOADED" and arg1 == TLVaddonName then
-
-        TLVaddon.AddOnTitle = GetAddOnMetadata(TLVaddonName, "Title")
-        TLVaddon.AddOnVersion = GetAddOnMetadata(TLVaddonName, "Version")
-
-        QuestCountFrame:UnregisterEvent("ADDON_LOADED")
-
-        return
-
-    end
+function QuestCount:OnEvent (event, arg1)
 
     if (self.text == nil) then
         return
     end
 
-    local maxQuests = C_QuestLog.GetMaxNumQuestsCanAccept()
+    local maxQuests = 35 -- C_QuestLog.GetMaxNumQuestsCanAccept()
 
     local _, numQuests = C_QuestLog.GetNumQuestLogEntries()
 
-    local numStandardQuests = TLVaddon:StandardQuests()
+    local numStandardQuests = QuestCount:CountingQuests()
+
+    numStandardQuests = numQuests
 
     local color
 
@@ -180,8 +200,8 @@ function TLVaddon:OnEvent (event, arg1)
         color = "|cfff01000"
     elseif (maxQuests - numStandardQuests < 6) then
         color = "|cfff0f010"
-    elseif (ElvUIColor) then
-        color = ElvUIColor
+    elseif (QuestCount.ElvUIColor) then
+        color = QuestCount.ElvUIColor
     end
 
     local append = ""
@@ -197,11 +217,11 @@ function TLVaddon:OnEvent (event, arg1)
         self.text:SetFormattedText(L["Quests"] .. ": %s / %s%s", numStandardQuests, maxQuests, append)
     end
 
-    TLVDataText = self
+    QuestCount.DataText = self
 
 end
 
-function TLVaddon:OnClick ()
+function QuestCount:OnClick ()
 
     ToggleQuestLog()
 
@@ -209,20 +229,31 @@ end
 
 local function ValueColorUpdate (hex)
 
-    ElvUIColor = hex
+    QuestCount.ElvUIColor = hex
 
-    if TLVDataText then
-        TLVaddon:OnEvent(TLVDataText)
+    if QuestCount.DataText then
+        QuestCount:OnEvent(QuestCount.DataText)
     end
 end
 
-QuestCountFrame = CreateFrame("Frame")
+QuestCount.E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-QuestCountFrame:RegisterEvent("ADDON_LOADED")
-QuestCountFrame:SetScript("OnEvent", TLVaddon.OnEvent)
+QuestCount.DT:RegisterDatatext('Quest Count', nil, { 'QUEST_LOG_UPDATE' }, QuestCount.OnEvent, nil, QuestCount.OnClick, nil, nil, "Quest Count")
 
-E.valueColorUpdateFuncs[ValueColorUpdate] = true
+-- QuestCount.DT:RegisterDatatext('Quest Count', nil, { 'PLAYER_ENTERING_WORLD', 'QUEST_ACCEPTED', 'QUEST_AUTOCOMPLETE', 'QUEST_COMPLETE', 'QUEST_DATA_LOAD_RESULT', 'QUEST_DETAIL', 'QUEST_LOG_CRITERIA_UPDATE', 'QUEST_LOG_UPDATE', 'QUEST_POI_UPDATE', 'QUEST_REMOVED', 'QUEST_TURNED_IN', 'QUEST_WATCH_LIST_CHANGED', 'QUEST_WATCH_UPDATE', 'QUESTLINE_UPDATE', 'TASK_PROGRESS_UPDATE', 'TREASURE_PICKER_CACHE_FLUSH', 'WAYPOINT_UPDATE', 'WORLD_QUEST_COMPLETED_BY_SPELL' }, QuestCount.OnEvent, nil, QuestCount.OnClick, nil, nil, "Quest Count")
 
-DT:RegisterDatatext('Quest Count', nil, { 'PLAYER_ENTERING_WORLD', 'QUEST_LOG_UPDATE' }, TLVaddon.OnEvent, nil, TLVaddon.OnClick, nil, nil, "Quest Count")
+function QuestCount:Init (event, arg1)
 
--- DT:RegisterDatatext('Quest Count', nil, { 'PLAYER_ENTERING_WORLD', 'QUEST_ACCEPTED', 'QUEST_AUTOCOMPLETE', 'QUEST_COMPLETE', 'QUEST_DATA_LOAD_RESULT', 'QUEST_DETAIL', 'QUEST_LOG_CRITERIA_UPDATE', 'QUEST_LOG_UPDATE', 'QUEST_POI_UPDATE', 'QUEST_REMOVED', 'QUEST_TURNED_IN', 'QUEST_WATCH_LIST_CHANGED', 'QUEST_WATCH_UPDATE', 'QUESTLINE_UPDATE', 'TASK_PROGRESS_UPDATE', 'TREASURE_PICKER_CACHE_FLUSH', 'WAYPOINT_UPDATE', 'WORLD_QUEST_COMPLETED_BY_SPELL' }, TLVaddon.OnEvent, nil, TLVaddon.OnClick, nil, nil, "Quest Count")
+    if event == "ADDON_LOADED" and arg1 == QuestCount_Name then
+
+        TLVlib:Init()
+
+        self:UnregisterEvent("ADDON_LOADED")
+
+    end
+
+end
+
+local TLV_Event_Frame = CreateFrame("Frame")
+TLV_Event_Frame:RegisterEvent("ADDON_LOADED")
+TLV_Event_Frame:SetScript("OnEvent", QuestCount.Init)
