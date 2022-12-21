@@ -2,6 +2,12 @@
 
 Full changelog: https://github.com/last-voice/ElvUI_QuestCount/blob/main/CHANGELOG.md
 
+v1.4.2.1
+- stupid me :-/
+
+v1.4.2
+- Changed the too generic name of saved variable.
+
 v1.4.1
 - TLVlib in separate repo
 

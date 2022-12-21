@@ -2,7 +2,9 @@
 ## Title: |cff1784d1ElvUI|r QuestCount |cfff0b040#TLV|r
 ## Notes: ElvUI data text: Count of standard quests in your log
 ## Author: the_last_voice
-## Version: v1.2.1
+## SavedVariablesPerCharacter: _QuestCount_C
+## SavedVariables: _QuestCount_A
+## Version: v1.4.2.1
 ## RequiredDeps: ElvUI
 
 localization/enUS.lua

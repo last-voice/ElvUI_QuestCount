@@ -253,6 +253,43 @@ function QuestCount:Init (event, arg1)
 
 end
 
-local TLV_Event_Frame = CreateFrame("Frame")
-TLV_Event_Frame:RegisterEvent("ADDON_LOADED")
-TLV_Event_Frame:SetScript("OnEvent", QuestCount.Init)
+local TLV_Init_Frame = CreateFrame("Frame")
+TLV_Init_Frame:RegisterEvent("ADDON_LOADED")
+TLV_Init_Frame:SetScript("OnEvent", QuestCount.Init)
+
+function QuestCount:IsDebug ()
+
+    return _QuestCount_A.DebugMode or false
+
+end
+
+-- /abss
+
+SLASH_TLV_QUESTCOUNT1 = "/questcount"
+SlashCmdList["TLV_QUESTCOUNT"] = function(message)
+
+    message = message or ""
+
+    local mode, arg1, arg2 = string.split(" ", message, 3)
+
+    mode = string.lower(mode or "")
+    arg1 = string.lower(arg1 or "")
+    arg2 = string.lower(arg2 or "")
+
+    if mode == "debug" then
+
+        if arg1 == "on" then
+
+            _QuestCount_A.DebugMode = true
+
+            TLVlib:Chat(L["chat.Debug"] .. "|cff00f010" .. L["on"] .. "|r.")
+
+        elseif arg1 == "off" then
+
+            _QuestCount_A.DebugMode = false
+            TLVlib:Chat(L["chat.Debug"] .. "|cfff01000" .. L["off"] .. "|r.")
+        end
+
+    end
+
+end
