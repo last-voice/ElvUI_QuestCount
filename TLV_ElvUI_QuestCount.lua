@@ -165,8 +165,7 @@ function QuestCount:CountingQuests ()
                     -- no hidden quests
                     cnt = cnt + 1
 
-                    QuestCount:qdbg(cnt, questType, questInfo)
-
+                    -- QuestCount:qdbg(cnt, questType, questInfo)
 
                 end
 
@@ -196,9 +195,9 @@ function QuestCount:OnEvent (event, arg1)
 
     local color
 
-    if (maxQuests - numStandardQuests < 1) then
+    if (maxQuests - numStandardQuests < 4) then
         color = "|cfff01000"
-    elseif (maxQuests - numStandardQuests < 6) then
+    elseif (maxQuests - numStandardQuests < 7) then
         color = "|cfff0f010"
     elseif (QuestCount.ElvUIColor) then
         color = QuestCount.ElvUIColor
