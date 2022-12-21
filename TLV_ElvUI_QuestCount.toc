@@ -4,7 +4,7 @@
 ## Author: the_last_voice
 ## SavedVariablesPerCharacter: _QuestCount_C
 ## SavedVariables: _QuestCount_A
-## Version: v1.4.2.1
+## Version: v1.4.2.2
 ## RequiredDeps: ElvUI
 
 localization/enUS.lua

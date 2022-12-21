@@ -2,6 +2,9 @@
 
 Full changelog: https://github.com/last-voice/ElvUI_QuestCount/blob/main/CHANGELOG.md
 
+v1.4.2.2
+- Peeps, I'm working on another. So i changed the file structure of this addon too. This caused quite some chaos. Finally, this version should be stable again. Sorry!
+
 v1.4.2.1
 - stupid me :-/
 
